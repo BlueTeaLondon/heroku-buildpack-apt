@@ -78,6 +78,8 @@ for PACKAGE in $(cat $BUILD_DIR/Aptfile | grep -v -s -e "^:repo:"); do
   fi
 done
 
+apt-get $APT_OPTIONS -y --force-yes -d remove libreoffice-gtk3 | indent
+
 mkdir -p $BUILD_DIR/.apt
 
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
