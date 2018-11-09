@@ -53,7 +53,13 @@ else
   cat $BUILD_DIR/Aptfile | grep -s -e "^:repo:" | sed 's/^:repo:\(.*\)\s*$/\1/g' >> $APT_SOURCES
 fi
 
-APT_OPTIONS="--allow-unauthenticated -o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
+# Install GPG key
+topic "Install gpg key for Libreoffice APT Repository "
+APT_KEYRING="$CACHE_DIR/apt/trusted.gpg"
+apt-key --keyring $APT_KEYRING adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80/ 83FBA1751378B444
+
+
+APT_OPTIONS="--allow-unauthenticated -o Dir::Etc::Trusted=$APT_KEYRING -o debug::nolocking=true -o dir::cache=$APT_CACHE_DIR -o dir::state=$APT_STATE_DIR"
 APT_OPTIONS="$APT_OPTIONS -o dir::etc::sourcelist=$APT_SOURCES"
 
 topic "Updating apt caches"
